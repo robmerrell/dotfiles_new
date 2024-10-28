@@ -1,0 +1,65 @@
+# plugins
+source "%val{config}/plugins/plug.kak/rc/plug.kak"
+plug "andreyorst/plug.kak" noload
+
+# suppress startup message
+set global startup_info_version 20240518
+
+# Terminal title
+set-option global ui_options terminal_set_title=no
+
+# Width of a tab
+set-option global tabstop 2
+
+# Indent with 2 spaces
+set-option global indentwidth 2
+
+# Display line numbers
+add-highlighter global/ number-lines -relative -separator "  "
+
+# TODO: doesn't work with tree sitter
+# Highlight trailing whitespace
+# add-highlighter global/ regex \h+$ rgb:#ff0000,default
+# define-command -override tree-sitter-user-after-highlighter %{
+#   # add-highlighter -override buffer/show-matching show-matching
+# 	add-highlighter global/ regex \h+$ 0:Error
+# }
+#
+
+# Git status
+# enable flag-lines hl for git diff
+hook global WinCreate .* %{
+    add-highlighter window/git-diff flag-lines Default git_diff_flags
+}
+# trigger update diff if inside git dir
+hook global BufOpenFile .* %{
+    evaluate-commands -draft %sh{
+        cd $(dirname "$kak_buffile")
+        if [ $(git rev-parse --git-dir 2>/dev/null) ]; then
+            for hook in WinCreate BufReload BufWritePost; do
+                printf "hook buffer -group git-update-diff %s .* 'git update-diff'\n" "$hook"
+            done
+        fi
+    }
+}
+
+# Softwrap long lines
+add-highlighter global/ wrap -word -indent
+
+# Always keep one line and three columns displayed around the cursor
+set-option global scrolloff 4,3
+
+# core
+source "%val{config}/conf/fzf.kak"
+source "%val{config}/conf/lsp.kak"
+source "%val{config}/conf/tree-sitter.kak"
+source "%val{config}/conf/mux.kak"
+source "%val{config}/conf/editing.kak"
+source "%val{config}/conf/keybinds.kak"
+
+# languages
+source "%val{config}/conf/go.kak"
+source "%val{config}/conf/elixir.kak"
+
+# TODO: Does colorscheme needs to be set after tree-sitter
+colorscheme catppuccin_macchiato
