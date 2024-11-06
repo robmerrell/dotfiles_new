@@ -47,14 +47,14 @@ set-face global bullet "%opt{green}"
 set-face global list   "%opt{white}"
 
 # Builtins
-set-face global Default            "%opt{white},%opt{background}"
-set-face global PrimarySelection   "%opt{gray0},%opt{lavender}"
-set-face global SecondarySelection "%opt{lavender},%opt{gray0}"
+set-face global Default            "%opt{white},default"
+set-face global PrimarySelection   "rgb:000000,%opt{lavender}"
+set-face global SecondarySelection "%opt{lavender},rgb:000000"
 set-face global PrimaryCursor      "%opt{background},%opt{rosewater}"
 set-face global SecondaryCursor    "%opt{black1},%opt{teal}"
 set-face global PrimaryCursorEol   "%opt{gray0},%opt{mauve}"
 set-face global SecondaryCursorEol "%opt{gray0},%opt{maroon}"
-set-face global LineNumbers        "%opt{gray1},%opt{background}"
+set-face global LineNumbers        "%opt{gray1},default"
 set-face global LineNumberCursor   "%opt{lavender},%opt{gray0}+b"
 set-face global LineNumbersWrapped "%opt{teal},%opt{black1}+i"
 set-face global MenuForeground     "%opt{white},%opt{gray0}+b"
@@ -71,7 +71,7 @@ set-face global Prompt             "%opt{green},%opt{black2}"
 set-face global MatchingChar       "%opt{maroon},%opt{black2}"
 set-face global Whitespace         "%opt{gray1},%opt{background}+f"
 set-face global WrapMarker         Whitespace
-set-face global BufferPadding      "%opt{background},%opt{background}"
+set-face global BufferPadding      "%opt{background},default"
 
 # Code
 set-face global value          "%opt{orange}"

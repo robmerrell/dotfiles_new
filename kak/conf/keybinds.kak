@@ -1,4 +1,5 @@
 # User mode
+map -docstring "Leader" global user <space> ": enter-user-mode local-leader<ret>"
 map -docstring "Buffer" global user b ": enter-user-mode buffer-management<ret>"
 map -docstring "Comment line" global user c ": comment-line<ret>"
 map -docstring "Easy motion" global user e ": enter-user-mode easymotion<ret>"
@@ -10,6 +11,10 @@ map -docstring "Surround" global user s ": enter-user-mode surround<ret>"
 map -docstring "Windows" global user w ": enter-user-mode window-management<ret>"
 map -docstring "Yank to clipboard" global user y "<a-|> exec $SHELL -lc 'fish_clipboard_copy'<ret>"
 
+# Local Leader
+declare-user-mode local-leader
+map -docstring "Copy filename:linenumber" global local-leader p ": buffer-previous<ret>"
+
 # Buffer management
 declare-user-mode buffer-management
 map -docstring "Previous Buffer" global buffer-management p ": buffer-previous<ret>"
@@ -20,6 +25,10 @@ declare-user-mode window-management
 map -docstring "Close" global window-management q ": q<ret>"
 map -docstring "Split horizontally" global window-management s ": split<ret>"
 map -docstring "Split vertically" global window-management v ": vsplit<ret>"
+map -docstring "Select pane left" global window-management h %{: nop %sh{TMUX="${kak_client_env_TMUX}" tmux select-pane -L}<ret>}
+map -docstring "Select pane down" global window-management j %{: nop %sh{TMUX="${kak_client_env_TMUX}" tmux select-pane -D}<ret>}
+map -docstring "Select pane up" global window-management k %{: nop %sh{TMUX="${kak_client_env_TMUX}" tmux select-pane -U}<ret>}
+map -docstring "Select pane right" global window-management l %{: nop %sh{TMUX="${kak_client_env_TMUX}" tmux select-pane -R}<ret>}
 
 # Harpoon
 declare-user-mode harpoon-nav-list

@@ -52,7 +52,7 @@ set-option global scrolloff 4,3
 # core
 source "%val{config}/conf/fzf.kak"
 source "%val{config}/conf/lsp.kak"
-source "%val{config}/conf/tree-sitter.kak"
+# source "%val{config}/conf/tree-sitter.kak"
 source "%val{config}/conf/mux.kak"
 source "%val{config}/conf/editing.kak"
 source "%val{config}/conf/keybinds.kak"
