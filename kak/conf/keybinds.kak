@@ -1,3 +1,6 @@
+# hover
+map global normal <c-h> ": lsp-hover<ret>"
+
 # User mode
 map -docstring "Leader" global user <space> ": enter-user-mode local-leader<ret>"
 map -docstring "Buffer" global user b ": enter-user-mode buffer-management<ret>"
@@ -19,6 +22,7 @@ map -docstring "Copy filename:linenumber" global local-leader p ": buffer-previo
 declare-user-mode buffer-management
 map -docstring "Previous Buffer" global buffer-management p ": buffer-previous<ret>"
 map -docstring "Next Buffer" global buffer-management n ": buffer-next<ret>"
+map -docstring "Find Buffer" global buffer-management s ": require-module fzf-buffer; fzf-buffer<ret>"
 
 # Window management
 declare-user-mode window-management
@@ -45,7 +49,7 @@ declare-user-mode lsp-code
 map -docstring "Actions" global lsp-code a ": lsp-code-actions<ret>"
 map -docstring "Diagnostics" global lsp-code d ": lsp-diagnostics<ret>"
 map -docstring "Find error" global lsp-code e ": lsp-find-error<ret>"
-map -docstring "Hover" global lsp-code h ": lsp-hover<ret>"
+map -docstring "Hover" global lsp-code h ": lsp-hover-buffer<ret>"
 map -docstring "Show documentation in buffer" global lsp-code K ": lsp-hover-buffer<ret>"
 map -docstring "Document symbols" global lsp-code s ": lsp-document-symbol<ret>"
 

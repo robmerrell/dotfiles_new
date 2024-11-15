@@ -6,7 +6,6 @@ hook -group lsp-filetype-elixir global BufSetOption filetype=elixir %{
   set-option buffer lsp_servers %{
     [elixir-ls]
     command = "language_server.sh"
-    # root_globs = ["mix.exs", "mix.lock"]
     root_globs = ["mix.lock", "mix.exs"]
     settings_section = "elixirLS"
     [elixir-ls.settings.elixirLS]

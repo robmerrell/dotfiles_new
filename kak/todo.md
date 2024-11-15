@@ -1,0 +1,8 @@
+- [ ] Complete with tab
+- [ ] snippets
+- [ ] lsp completions with parameters
+- [ ] local leader
+- [ ] replace fzf mode
+- [ ] fzf lsp diagnostics, doc symbols
+- [ ] better yazi integration
+- [ ] AI integration

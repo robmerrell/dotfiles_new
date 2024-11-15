@@ -1,3 +1,6 @@
+# colors
+colorscheme batsquatch
+
 # plugins
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "andreyorst/plug.kak" noload
@@ -46,7 +49,7 @@ hook global BufOpenFile .* %{
 # Softwrap long lines
 add-highlighter global/ wrap -word -indent
 
-# Always keep one line and three columns displayed around the cursor
+# Always keep four lines and three columns displayed around the cursor
 set-option global scrolloff 4,3
 
 # core
@@ -60,6 +63,3 @@ source "%val{config}/conf/keybinds.kak"
 # languages
 source "%val{config}/conf/go.kak"
 source "%val{config}/conf/elixir.kak"
-
-# TODO: Does colorscheme needs to be set after tree-sitter
-colorscheme catppuccin_macchiato
