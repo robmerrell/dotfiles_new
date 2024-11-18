@@ -63,3 +63,4 @@ source "%val{config}/conf/keybinds.kak"
 # languages
 source "%val{config}/conf/go.kak"
 source "%val{config}/conf/elixir.kak"
+
