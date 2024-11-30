@@ -29,8 +29,10 @@ define-command fuzzy-find-file-all -docstring "Find file (all)" -params .. %{
   }
 }
 
-define-command fuzzy-find-buffer -docstring "Switch to a buffer" %{ evaluate-commands %sh{
+define-command fuzzy-find-buffer -docstring "Switch to a buffer" %{
+  evaluate-commands %sh{
     BUFFER=$(eval set -- "$kak_buflist"; for buf in "$@"; do echo "$buf"; done | \
     fzf-tmux -p 70%,50%)
     [ -n "$BUFFER" ] && echo "eval -client '$kak_client' 'buffer $BUFFER'" | kak -p "$kak_session"
-} }
+  }
+}

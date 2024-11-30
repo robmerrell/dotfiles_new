@@ -64,3 +64,8 @@ source "%val{config}/conf/keybinds.kak"
 source "%val{config}/conf/go.kak"
 source "%val{config}/conf/elixir.kak"
 
+define-command ll -docstring "ll" -params .. %{
+  nop %sh{
+    exec $SHELL -lc 'echo -n $kak_buffile:$kak_cursor_line | fish_clipboard_copy'
+  }
+}
