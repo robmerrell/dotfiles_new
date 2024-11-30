@@ -1,6 +1,9 @@
 # hover
 map global normal <c-h> ": lsp-hover<ret>"
 
+# insert tab
+map global insert <tab> '<a-;>:try lsp-snippets-select-next-placeholders catch %{ execute-keys -with-hooks <lt>tab> }<ret>' -docstring 'Select next snippet placeholder'
+
 # User mode
 map -docstring "Leader" global user <space> ": enter-user-mode local-leader<ret>"
 map -docstring "Buffer" global user b ": enter-user-mode buffer-management<ret>"
@@ -23,7 +26,13 @@ map -docstring "Search in files" global file-mode t ": popup-find-file<ret>"
 
 # Local leader
 declare-user-mode local-leader
-map -docstring "Copy filename:linenumber" global local-leader p ": buffer-previous<ret>"
+map -docstring "Format JSON" global local-leader j "|jq .<ret>"
+map -docstring "Open in Github" global local-leader g ": open-in-github<ret>"
+map -docstring "Copy filename:linenumber" global local-leader l ": copy-git-relative-file<ret>"
+map -docstring "Rerun right pane" global local-leader r ": rerun-right<ret>"
+map -docstring "Rerun shell" global local-leader s ": rerun-shell<ret>"
+map -docstring "Rerun test" global local-leader t ": rerun-test<ret>"
+map -docstring "Format XML" global local-leader x "|xmllint --format -<ret>"
 
 # Buffer management
 declare-user-mode buffer-management

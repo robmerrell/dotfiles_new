@@ -4,14 +4,15 @@
 - [ ] move comment to gc?
 - [ ] Fix easymotion
 - [ ] lsp completions with parameters
-- [ ] local leader
-	- [ ] copy file
-	- [ ] run test
-	- [ ] run right
-	- [ ] format json
-	- [ ] format xml
-	- [ ] open in github
-- [ ] replace fzf mode
+- [x] local leader
+	- [x] copy file
+	- [x] run test
+	- [x] run right
+	- [x] format json
+	- [x] format xml
+	- [x] open in github
+- [ ] open to an empty buffer
+- [x] replace fzf mode
 - [ ] fzf lsp diagnostics, doc symbols
 - [ ] better yazi integration
 - [ ] AI integration

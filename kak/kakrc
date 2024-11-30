@@ -64,8 +64,26 @@ source "%val{config}/conf/keybinds.kak"
 source "%val{config}/conf/go.kak"
 source "%val{config}/conf/elixir.kak"
 
-define-command ll -docstring "ll" -params .. %{
+define-command copy-git-relative-file -docstring "Copies the git filename:cursor to the clipboard" -params .. %{
   nop %sh{
-    exec $SHELL -lc 'echo -n $kak_buffile:$kak_cursor_line | fish_clipboard_copy'
+    exec $SHELL -lc 'echo -n $(git_relative $kak_buffile):$kak_cursor_line | fish_clipboard_copy'
   }
+}
+
+define-command open-in-github -docstring "Opens the file in Github" -params .. %{
+  nop %sh{
+    exec $SHELL -lc 'gh browse $(git_relative $kak_buffile):$kak_cursor_line'
+  }
+}
+
+define-command rerun-tests -docstring "Rerun test" -params .. %{
+  nop %sh{ exec $SHELL -lc 'rerun_test' }
+}
+
+define-command rerun-right -docstring "Rerun right" -params .. %{
+  nop %sh{ exec $SHELL -lc 'rerun_right' }
+}
+
+define-command rerun-shell -docstring "Rerun shell" -params .. %{
+  nop %sh{ exec $SHELL -lc 'rerun_shell' }
 }
