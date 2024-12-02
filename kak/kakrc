@@ -5,6 +5,9 @@ colorscheme batsquatch
 source "%val{config}/plugins/plug.kak/rc/plug.kak"
 plug "andreyorst/plug.kak" noload
 
+# tabs
+plug "andreyorst/smarttab.kak"
+
 # suppress startup message
 set global startup_info_version 20240518
 
