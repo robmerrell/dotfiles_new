@@ -63,6 +63,7 @@ source "%val{config}/conf/keybinds.kak"
 # languages
 source "%val{config}/conf/go.kak"
 source "%val{config}/conf/elixir.kak"
+source "%val{config}/conf/roc.kak"
 
 define-command copy-git-relative-file -docstring "Copies the git filename:cursor to the clipboard" -params .. %{
   nop %sh{
