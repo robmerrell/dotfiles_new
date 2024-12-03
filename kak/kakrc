@@ -80,8 +80,8 @@ define-command open-in-github -docstring "Opens the file in Github" -params .. %
   }
 }
 
-define-command rerun-tests -docstring "Rerun test" -params .. %{
-  nop %sh{ exec $SHELL -lc 'rerun_test' }
+define-command rerun-tests -docstring "Rerun tests" -params .. %{
+  nop %sh{ exec $SHELL -lc 'rerun_tests' }
 }
 
 define-command rerun-right -docstring "Rerun right" -params .. %{

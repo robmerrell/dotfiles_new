@@ -29,9 +29,9 @@ declare-user-mode local-leader
 map -docstring "Format JSON" global local-leader j "|jq .<ret>"
 map -docstring "Open in Github" global local-leader g ": open-in-github<ret>"
 map -docstring "Copy filename:linenumber" global local-leader l ": copy-git-relative-file<ret>"
+map -docstring "Rerun test" global local-leader p ": rerun-tests<ret>"
 map -docstring "Rerun right pane" global local-leader r ": rerun-right<ret>"
 map -docstring "Rerun shell" global local-leader s ": rerun-shell<ret>"
-map -docstring "Rerun test" global local-leader t ": rerun-test<ret>"
 map -docstring "Format XML" global local-leader x "|xmllint --format -<ret>"
 
 # Buffer management
