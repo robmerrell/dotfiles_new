@@ -43,8 +43,7 @@ formatter = { command = "roc", args =[ "format", "--stdin", "--stdout"]}
 
 [[grammar]]
 name = "roc"
-source = { git = "https://github.com/faldor20/tree-sitter-roc.git", rev = "a639cb367b0ffe95cd7d94ad5b4a26da0337180f" }
-
+source = { git = "https://github.com/faldor20/tree-sitter-roc.git", rev = "ef46edd0c03ea30a22f7e92bc68628fb7231dc8a" }
 
 # XML
 [[language]]
