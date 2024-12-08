@@ -3,15 +3,15 @@ theme = "tokyonight_storm"
 [editor]
 true-color = true
 line-number = "relative"
-end-of-line-diagnostics = "hint"
+end-of-line-diagnostics = "disable"
 
 [editor.inline-diagnostics]
 cursor-line = "warning" # show warnings and errors on the cursorline inline
 
 [editor.indent-guides]
 # I dislike how selections don't change the background of the guide
-render = false
-character = "│"
+render = true
+character = "·"
 
 [editor.cursor-shape]
 insert = "bar"
