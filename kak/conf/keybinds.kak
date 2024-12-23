@@ -11,7 +11,7 @@ map -docstring "Comment line" global user c ": comment-line<ret>"
 map -docstring "Easy motion" global user e ": enter-user-mode easymotion<ret>"
 map -docstring "File" global user f ": enter-user-mode file-mode<ret>"
 map -docstring "Harpoon" global user h ":enter-user-mode harpoon-nav-list<ret>"
-map -docstring "LSP" global user l ": enter-user-mode lsp-code<ret>"
+map -docstring "LSP" global user l ": enter-user-mode lsp<ret>"
 map -docstring "Paste the clipboard" global user p "<a-!> exec $SHELL -lc 'fish_clipboard_paste'<ret>"
 map -docstring "Surround" global user s ": enter-user-mode surround<ret>"
 map -docstring "Windows" global user w ": enter-user-mode window-management<ret>"
@@ -22,7 +22,7 @@ declare-user-mode file-mode
 map -docstring "Find file" global file-mode f ": fuzzy-find-file<ret>"
 map -docstring "Find file (all)" global file-mode F ": fuzzy-find-file-all<ret>"
 map -docstring "File tree" global file-mode t ": popup-find-file<ret>"
-map -docstring "Search in files" global file-mode t ": popup-find-file<ret>"
+map -docstring "Search in files" global file-mode t ": live-grep<ret>"
 
 # Local leader
 declare-user-mode local-leader

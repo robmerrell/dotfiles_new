@@ -23,14 +23,8 @@ set-option global indentwidth 2
 # Display line numbers
 add-highlighter global/ number-lines -relative -separator "  "
 
-# TODO: doesn't work with tree sitter
 # Highlight trailing whitespace
-# add-highlighter global/ regex \h+$ rgb:#ff0000,default
-# define-command -override tree-sitter-user-after-highlighter %{
-#   # add-highlighter -override buffer/show-matching show-matching
-# 	add-highlighter global/ regex \h+$ 0:Error
-# }
-#
+# add-highlighter global/ regex \h+$ rgb:#ff0000,default    
 
 # Git status
 # enable flag-lines hl for git diff
@@ -54,6 +48,9 @@ add-highlighter global/ wrap -word -indent
 
 # Always keep four lines and three columns displayed around the cursor
 set-option global scrolloff 4,3
+
+# grep commands
+set global grepcmd "rg --column"
 
 # core
 source "%val{config}/conf/fzf.kak"

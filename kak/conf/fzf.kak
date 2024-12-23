@@ -10,6 +10,9 @@
 # } defer fzf-grep %{
 #   set-option global fzf_grep_command "rg"
 # }
+#
+
+plug "raiguard/kak-live-grep"
 
 define-command fuzzy-find-file -docstring "Find file" -params .. %{
   evaluate-commands %sh{

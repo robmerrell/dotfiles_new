@@ -17,6 +17,7 @@
 - [ ] better yazi integration
 - [ ] AI integration
 - [ ] set json and xml file types
+- [ ] indent guides
 
 # Other
 - [ ] Add bat config to dotfiles
@@ -34,3 +35,4 @@
 - [ ] moduledoc and doc should be colored the same
 - [ ] end used as a map key (end:) should be highlighted as a key and not as a syntax thing
 - [ ] end used as a struct access (str.end) should not be highlighted as an internal keyword
+- [ ] question mark is not highlighted like the function
