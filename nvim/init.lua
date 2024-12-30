@@ -39,9 +39,9 @@ vim.cmd("autocmd BufEnter * setlocal formatoptions-=cro")
 
 -- colorspace
 vim.opt.termguicolors = true
- 
+
 -- plugins
 require("lazy").setup({
-  spec = { { import = "plugins" }},
+  spec = { { import = "plugins" } },
   checker = { enabled = false },
 })
