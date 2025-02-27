@@ -36,6 +36,8 @@ auto-signature-help = false
 "F" = "file_picker_in_current_buffer_directory"
 
 [keys.normal.space.space]
+# inline git blame
+"b" = ":sh exec $SHELL -lc 'git_blame_surround %{buffer_name} %{cursor_line}'"
 # open location in github
 "g" = ":sh exec $SHELL -lc 'gh browse %{buffer_name}:%{cursor_line}'"
 # format selected json
