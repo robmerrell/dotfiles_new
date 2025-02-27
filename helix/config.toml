@@ -4,6 +4,7 @@ theme = "tokyonight_storm"
 true-color = true
 line-number = "relative"
 end-of-line-diagnostics = "disable"
+continue-comments = false
 
 [editor.inline-diagnostics]
 cursor-line = "warning" # show warnings and errors on the cursorline inline
@@ -36,11 +37,11 @@ auto-signature-help = false
 
 [keys.normal.space.space]
 # open location in github
-"g" = ":sh exec $SHELL -lc 'gh browse %{filename:repo_rel}:%{linenumber}'"
+"g" = ":sh exec $SHELL -lc 'gh browse %{buffer_name}:%{cursor_line}'"
 # format selected json
 "j" = ":pipe jq"
 # copy the current line to the clipboard
-"l" = ":sh exec $SHELL -lc 'echo -n %{filename:repo_rel}:%{linenumber} | fish_clipboard_copy'"
+"l" = ":sh exec $SHELL -lc 'echo -n %{buffer_name}:%{cursor_line} | fish_clipboard_copy'"
 # send keys to rerun in named tmux test pane
 "p" = ":sh exec $SHELL -lc 'rerun_tests'"
 # send keys to rerun the pane to the right of the current pane
