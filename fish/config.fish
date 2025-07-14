@@ -1,4 +1,5 @@
 # env vars
+set -gx COLORTERM truecolor
 set -gx HELIX_RUNTIME $HOME/projects/gh/helix/runtime
 set -gx SKIM_DEFAULT_COMMAND rg --files
 
