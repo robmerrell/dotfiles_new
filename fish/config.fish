@@ -44,11 +44,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-# mise
-~/.local/bin/mise activate fish | source
-
 switch (uname)
     case Linux
+        ~/.local/bin/mise activate fish | source
         set -gx TMUX_TMPDIR /tmp
     case Darwin
         set -x PATH $PATH /opt/homebrew/bin
