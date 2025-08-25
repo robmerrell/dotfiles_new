@@ -1,4 +1,4 @@
--- bootstrap lazy.nvim
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
@@ -20,6 +20,7 @@ vim.g.mapleader = " "
 
 -- line numbers
 vim.opt.number = true
+vim.opt.relativenumber = true
 
 -- copy to the system clipboard
 vim.o.clipboard = "unnamedplus"
@@ -45,3 +46,5 @@ require("lazy").setup({
   spec = { { import = "plugins" } },
   checker = { enabled = false },
 })
+
+vim.cmd.colorscheme("eldritch")

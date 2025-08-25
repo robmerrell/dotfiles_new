@@ -21,6 +21,9 @@ nmap_leader("fF", "<Cmd>Pick files<CR>", "Find All Files")
 nmap_leader("fo", "<Cmd>NvimTreeFindFile<CR>", "Open File In Tree")
 nmap_leader("ft", "<Cmd>NvimTreeToggle<CR>", "Toggle Tree")
 
+-- search
+nmap_leader("sl", "<Cmd>Pick grep_live<CR>", "Live Grep")
+
 -- tab
 nmap_leader("t1", "<Cmd>tabn 1<CR>", "Tab 1")
 nmap_leader("t2", "<Cmd>tabn 2<CR>", "Tab 2")
@@ -89,6 +92,7 @@ miniclue.setup({
   clues = {
     { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
     { mode = "n", keys = "<Leader>f", desc = "+Files" },
+    { mode = "n", keys = "<Leader>s", desc = "+Search" },
     { mode = "n", keys = "<Leader>t", desc = "+Tabs" },
     { mode = "n", keys = "<Leader>v", desc = "+Version Control" },
     { mode = "n", keys = "<Leader>w", desc = "+Windows" },
