@@ -18,17 +18,15 @@ return {
       -- See :h blink-cmp-config-keymap for defining your own keymap
       keymap = { preset = "default" },
 
-      documentation = { auto_show = true, auto_show_delay_ms = 500 },
+      -- documentation = { auto_show = true, auto_show_delay_ms = 500 },
       signature = { enabled = true },
+      completion = { documentation = { auto_show = false, auto_show_delay_ms = 500 } },
 
       appearance = {
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
       },
-
-      -- (Default) Only show the documentation popup when manually triggered
-      completion = { documentation = { auto_show = false } },
 
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`

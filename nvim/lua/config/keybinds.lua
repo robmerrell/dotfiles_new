@@ -10,6 +10,17 @@ end
 
 -- top level
 nmap_leader("n", "<Cmd>nohlsearch<CR>", "Remove Highlight")
+nmap_leader("l", function()
+  local filepath = vim.fn.expand("%")
+  local lineno = vim.fn.line(".")
+  vim.fn.setreg("+", filepath .. ":" .. lineno)
+end, "Copy filename:lineno")
+
+-- g mappings
+vim.keymap.set("n", "gw", "<Cmd>HopWord<CR>", { desc = "Hop Word" })
+vim.keymap.set("n", "gd", function()
+  vim.lsp.buf.definition()
+end, { desc = "Go To Definition" })
 
 -- buffers
 nmap_leader("bf", "<Cmd>Pick buf_lines<CR>", "Find In Buffer")
@@ -17,9 +28,13 @@ nmap_leader("bs", "<Cmd>Pick buffers<CR>", "Search Buffers")
 
 -- file
 nmap_leader("ff", "<Cmd>Pick files<CR>", "Find Files")
-nmap_leader("fF", "<Cmd>Pick files<CR>", "Find All Files")
-nmap_leader("fo", "<Cmd>NvimTreeFindFile<CR>", "Open File In Tree")
-nmap_leader("ft", "<Cmd>NvimTreeToggle<CR>", "Toggle Tree")
+nmap_leader("fg", "<Cmd>Pick git_hunks<CR>", "Git Hunks")
+nmap_leader("fo", function()
+  MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+end, "Open File In Tree")
+nmap_leader("ft", function()
+  MiniFiles.open(nil, false)
+end, "Open Tree")
 
 -- search
 nmap_leader("sl", "<Cmd>Pick grep_live<CR>", "Live Grep")
@@ -36,6 +51,7 @@ nmap_leader("tn", "<Cmd>tabnext<CR>", "→")
 nmap_leader("tq", "<Cmd>tabclose<CR>", "Close Tab")
 
 -- version control
+nmap_leader("vb", "<Cmd>BlameToggle window<CR>", "Blame")
 nmap_leader("vo", "<Cmd>OpenInGHFileLines<CR>", "Open in Github")
 
 -- window
@@ -76,8 +92,8 @@ miniclue.setup({
     { mode = "x", keys = "`" },
 
     -- Registers
-    { mode = "n", keys = '"' },
-    { mode = "x", keys = '"' },
+    { mode = "n", keys = "\"" },
+    { mode = "x", keys = "\"" },
     { mode = "i", keys = "<C-r>" },
     { mode = "c", keys = "<C-r>" },
 

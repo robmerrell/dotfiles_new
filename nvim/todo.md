@@ -1,0 +1,33 @@
+- [ ] Better keybinds for todos
+- [x] Lua LSP
+- [ ] claude code
+- [ ] snippets
+- [ ] Trouble or some other error showing
+- [x] Look at mini.files
+- [ ] Add harpoon to buffers
+- [ ] Custom colorscheme
+    - [ ] More apparant documentation window
+- [ ] Look at multiple cursors
+- [ ] goimports as formatter
+- [x] mini.files search shows too much
+- [x] find all files not showing hidden files
+- [x] Find file in current directory
+- [x] Relative line numbers
+- [x] Copy current path:line to clipboard
+- [x] Indent guides
+- [ ] Better modeline
+- [x] Open in github
+- [x] Git blame
+- [x] Goto word
+- [ ] Fix lua lsp errors (neodev?)
+- [ ] Look at auto pairs
+- [ ] Format json
+- [ ] mini.files
+    - [x] Open by pressing enter
+    - [ ] Open in vertical split
+    - [ ] open in horizontal split
+- [ ] Search
+    - [x] Ripgrep
+    - [ ] In buffer search
+    - [ ] Ripgrep from directory of current file
+    - [ ] Search and replace multiple files
