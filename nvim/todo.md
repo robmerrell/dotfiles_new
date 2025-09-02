@@ -1,4 +1,6 @@
 - [ ] Better keybinds for todos
+- [ ] readme
+    - [ ] mention https://github.com/nvim-mini/mini.nvim/issues/1029 in issues
 - [x] Lua LSP
 - [ ] claude code
 - [ ] snippets
@@ -28,6 +30,7 @@
     - [ ] open in horizontal split
 - [ ] Search
     - [x] Ripgrep
+    - [x] symbols
     - [ ] In buffer search
     - [ ] Ripgrep from directory of current file
     - [ ] Search and replace multiple files

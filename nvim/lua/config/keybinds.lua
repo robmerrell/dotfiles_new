@@ -21,10 +21,15 @@ vim.keymap.set("n", "gw", "<Cmd>HopWord<CR>", { desc = "Hop Word" })
 vim.keymap.set("n", "gd", function()
   vim.lsp.buf.definition()
 end, { desc = "Go To Definition" })
+vim.keymap.set("n", "gi", function()
+  vim.lsp.buf.implementation()
+end, { desc = "Go To Implementation" })
 
 -- buffers
-nmap_leader("bf", "<Cmd>Pick buf_lines<CR>", "Find In Buffer")
 nmap_leader("bs", "<Cmd>Pick buffers<CR>", "Search Buffers")
+
+-- code
+nmap_leader("cs", "<Cmd>Pick lsp scope='document_symbol'<CR>", "Find Symbols")
 
 -- file
 nmap_leader("ff", "<Cmd>Pick files<CR>", "Find Files")
@@ -37,7 +42,8 @@ nmap_leader("ft", function()
 end, "Open Tree")
 
 -- search
-nmap_leader("sl", "<Cmd>Pick grep_live<CR>", "Live Grep")
+nmap_leader("sb", "<Cmd>Pick buf_lines<CR>", "Find in Buffer")
+nmap_leader("sl", "<Cmd>Pick grep_live<CR>", "Grep")
 
 -- tab
 nmap_leader("t1", "<Cmd>tabn 1<CR>", "Tab 1")
@@ -107,6 +113,7 @@ miniclue.setup({
 
   clues = {
     { mode = "n", keys = "<Leader>b", desc = "+Buffers" },
+    { mode = "n", keys = "<Leader>c", desc = "+Code" },
     { mode = "n", keys = "<Leader>f", desc = "+Files" },
     { mode = "n", keys = "<Leader>s", desc = "+Search" },
     { mode = "n", keys = "<Leader>t", desc = "+Tabs" },
