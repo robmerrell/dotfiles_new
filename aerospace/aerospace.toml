@@ -59,24 +59,24 @@ run= [
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 8 
-    inner.vertical =   8 
-    outer.left =       8 
-    outer.bottom =     8 
-    outer.top =        8 
-    outer.right =      8 
+    inner.horizontal = 10 
+    inner.vertical =   10 
+    outer.left =       10 
+    outer.bottom =     10 
+    outer.top =        10 
+    outer.right =      10 
 
 [workspace-to-monitor-force-assignment]
-  1 = 'main'
-  2 = 'main'
-  3 = 'main'
-  4 = 'main'
-  5 = 'main'
-  6 = 'secondary'
-  7 = 'secondary'
-  8 = 'secondary'
-  9 = 'secondary'
-  10 = 'secondary'
+  a = 'secondary'
+  s = 'secondary'
+  d = 'secondary'
+  f = 'secondary'
+  g = 'secondary'
+  z = ['main', 'secondary']
+  x = ['main', 'secondary']
+  # 8 = 'secondary'
+  # 9 = 'secondary'
+  # 10 = 'secondary'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -132,28 +132,22 @@ run= [
     alt-equal = 'resize smart +50'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-a = ['workspace 1', 'workspace 6']
-    alt-s = ['workspace 2', 'workspace 7']
-    alt-d = ['workspace 3', 'workspace 8']
-    alt-f = ['workspace 4', 'workspace 9']
-    alt-g = ['workspace 5', 'workspace 10']
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
+    alt-a = 'workspace a'
+    alt-s = 'workspace s'
+    alt-d = 'workspace d'
+    alt-f = 'workspace f'
+    alt-g = 'workspace g'
+    alt-z = 'workspace z'
+    alt-x = 'workspace x'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-2 = 'move-node-to-workspace 2'
-    alt-shift-3 = 'move-node-to-workspace 3'
-    alt-shift-4 = 'move-node-to-workspace 4'
-    alt-shift-5 = 'move-node-to-workspace 5'
-    alt-shift-a = 'move-node-to-workspace 6'
-    alt-shift-s = 'move-node-to-workspace 7'
-    alt-shift-d = 'move-node-to-workspace 8'
-    alt-shift-f = 'move-node-to-workspace 9'
-    alt-shift-g = 'move-node-to-workspace 10'
+    alt-shift-a = 'move-node-to-workspace a'
+    alt-shift-s = 'move-node-to-workspace s'
+    alt-shift-d = 'move-node-to-workspace d'
+    alt-shift-f = 'move-node-to-workspace f'
+    alt-shift-g = 'move-node-to-workspace g'
+    alt-shift-z = 'move-node-to-workspace z'
+    alt-shift-x = 'move-node-to-workspace x'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-tab = 'workspace-back-and-forth'
