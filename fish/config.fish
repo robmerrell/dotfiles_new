@@ -30,6 +30,7 @@ set -x FZF_DEFAULT_OPTS $FZF_DEFAULT_OPTS \
 # aliases
 alias vi='nvim'
 alias vim='nvim'
+alias ls='eza --icons=auto -l'
 
 # paths
 set -x GOPATH $HOME/go

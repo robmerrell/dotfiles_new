@@ -74,9 +74,6 @@ run= [
   g = 'secondary'
   z = ['main', 'secondary']
   x = ['main', 'secondary']
-  # 8 = 'secondary'
-  # 9 = 'secondary'
-  # 10 = 'secondary'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -137,6 +134,13 @@ run= [
     alt-d = 'workspace d'
     alt-f = 'workspace f'
     alt-g = 'workspace g'
+    # old-style num switching
+    alt-1 = 'workspace a'
+    alt-2 = 'workspace s'
+    alt-3 = 'workspace d'
+    alt-4 = 'workspace f'
+    alt-5 = 'workspace g'
+    # secondary
     alt-z = 'workspace z'
     alt-x = 'workspace x'
 
