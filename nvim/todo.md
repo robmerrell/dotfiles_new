@@ -21,7 +21,7 @@
 - [x] Open in github
 - [x] Git blame
 - [x] Goto word
-- [ ] Fix lua lsp errors (neodev?)
+- [x] Fix lua lsp errors (neodev?)
 - [ ] Look at auto pairs
 - [ ] Format json
 - [ ] mini.files

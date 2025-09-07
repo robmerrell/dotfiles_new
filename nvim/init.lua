@@ -47,4 +47,4 @@ require("lazy").setup({
   checker = { enabled = false },
 })
 
-vim.cmd.colorscheme("eldritch")
+vim.cmd.colorscheme("tokyonight-storm")
