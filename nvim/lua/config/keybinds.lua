@@ -30,6 +30,7 @@ nmap_leader("bs", "<Cmd>Pick buffers<CR>", "Search Buffers")
 
 -- code
 nmap_leader("cs", "<Cmd>Pick lsp scope='document_symbol'<CR>", "Find Symbols")
+nmap_leader("ct", "<Cmd>Trouble diagnostics toggle filter.buf=0<CR>", "Buffer Diagnostics")
 
 -- file
 nmap_leader("ff", "<Cmd>Pick files<CR>", "Find Files")

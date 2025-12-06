@@ -1,6 +1,6 @@
 # Shows a tmux cheatsheet using glow
 function cheat_tmux
-  echo -n "
+    echo -n "
   # System
   `ctrl + a` Prefix
   `d` Detach Session
@@ -14,7 +14,7 @@ function cheat_tmux
   `&` Kill Window
  
   # Panes
-  `q` Show Number
+  `z` Zoom
   `s` Split Horizontally
   `v` Split Vertically
   `h` Left Pane
@@ -22,5 +22,5 @@ function cheat_tmux
   `k` Up Pane
   `l` Right Pane
   `x` Kill Pane" \
-  | glow -s dracula
+        | glow -s dracula
 end

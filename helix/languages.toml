@@ -28,7 +28,7 @@ auto-format = true
 formatter = { command = "goimports" }
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = [ "gopls", "golangci-lint-lsp" ]
+language-servers = [ "gopls" ]
 indent = { tab-width = 4, unit = "\t" }
 
 # JSON
@@ -37,6 +37,27 @@ name = "json"
 auto-format = true
 formatter = { command = "jq", args = [".", "-"] }
 indent = { tab-width = 2, unit = "  " }
+
+# Python
+[[language]]
+name = "python"
+language-servers = ["basedpyright", "ruff"]
+auto-format = false
+diagnostic-severity = "error"
+
+[language-server.basedpyright]
+command = "basedpyright-langserver"
+args = ["--stdio"]
+except-features = ["format", "code-action"]
+
+[language-server.basedpyright.config.basedpyright.analysis]
+autoSearchPaths = true
+typeCheckingMode = "basic"
+diagnosticMode = "openFilesOnly"
+
+[language-server.ruff]
+command = "ruff"
+args = ["server", "--preview"]
 
 # ROC
 [language-server.roc-ls]

@@ -1,7 +1,12 @@
 # env vars
+set -gx EDITOR hx
 set -gx COLORTERM truecolor
 set -gx HELIX_RUNTIME $HOME/projects/gh/helix/runtime
 set -gx SKIM_DEFAULT_COMMAND rg --files
+
+if test -f ~/.config/fish/secrets.fish
+    source ~/.config/fish/secrets.fish
+end
 
 # fzf settings
 set -x FZF_DEFAULT_OPTS $FZF_DEFAULT_OPTS \
@@ -31,6 +36,7 @@ set -x FZF_DEFAULT_OPTS $FZF_DEFAULT_OPTS \
 alias vi='nvim'
 alias vim='nvim'
 alias ls='eza --icons=auto -l'
+alias ll='eza --icons=auto -la'
 
 # paths
 set -x GOPATH $HOME/go
@@ -45,9 +51,10 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
+~/.local/bin/mise activate fish | source
+
 switch (uname)
     case Linux
-        ~/.local/bin/mise activate fish | source
         set -gx TMUX_TMPDIR /tmp
     case Darwin
         set -x PATH $PATH /opt/homebrew/bin

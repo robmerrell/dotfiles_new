@@ -17,6 +17,17 @@ return {
         },
       })
 
+      lspconfig["basedpyright"].setup({
+        capabilities = capabilities,
+        settings = {
+          basedpyright = {
+            analysis = {
+              typeCheckingMode = "basic",
+            },
+          },
+        },
+      })
+
       lspconfig["elixirls"].setup({
         capabilities = capabilities,
         cmd = { "language_server.sh" },

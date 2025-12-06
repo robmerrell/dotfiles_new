@@ -8,6 +8,32 @@ local config = {}
 -- help provide clearer error messages
 if wezterm.config_builder then
   config = wezterm.config_builder()
+  local act = wezterm.action
+
+  config.keys = {
+    {
+      key = "R",
+      mods = "CMD|SHIFT",
+      action = wezterm.action.PromptInputLine {
+        description = "Enter new name for tab",
+        action = wezterm.action_callback(function(window, _pane, line)
+          if line then
+            window:active_tab():set_title(line)
+          end
+        end),
+      },
+    },
+    {
+      key = "{",
+      mods = "ALT|SHIFT",
+      action = act.MoveTabRelative(-1),
+    },
+    {
+      key = "}",
+      mods = "ALT|SHIFT",
+      action = act.MoveTabRelative(1),
+    },
+  }
 end
 
 config.use_ime = false
