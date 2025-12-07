@@ -51,12 +51,13 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
-~/.local/bin/mise activate fish | source
 
 switch (uname)
     case Linux
+        /usr/bin/mise activate fish | source
         set -gx TMUX_TMPDIR /tmp
     case Darwin
+        ~/.local/bin/mise activate fish | source
         set -x PATH $PATH /opt/homebrew/bin
         set -x PATH $PATH /Applications/Postgres.app/Contents/Versions/16/bin
 end
