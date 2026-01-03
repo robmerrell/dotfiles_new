@@ -35,6 +35,7 @@ keybinds clear-defaults=true {
         // pane splitting
         bind "s" { NewPane "down"; SwitchToMode "normal"; }
         bind "v" { NewPane "right"; SwitchToMode "normal"; }
+        bind "t" { NewPane "stacked"; SwitchToMode "normal"; }
         bind "x" { CloseFocus; }
 
         // tabs
@@ -355,6 +356,7 @@ plugins {
 // eg. "file:/path/to/my-plugin.wasm"
 // eg. "https://example.com/my-plugin.wasm"
 load_plugins {
+    "file:~/.config/zellij/plugins/zjstatus.wasm"
 }
 web_client {
     font "monospace"
