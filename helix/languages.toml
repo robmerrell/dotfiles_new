@@ -89,4 +89,4 @@ indent = { tab-width = 2, unit = "  " }
 
 # Zig
 [language-server.zls]
-command = "/home/robmerrell/projects/gh/zls/zig-out/bin/zls"
+command = "zls"
