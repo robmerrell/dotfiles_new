@@ -6,6 +6,9 @@ line-number = "relative"
 end-of-line-diagnostics = "disable"
 continue-comments = false
 
+[editor.soft-wrap]
+enable = true
+
 [editor.inline-diagnostics]
 cursor-line = "warning" # show warnings and errors on the cursorline inline
 
@@ -26,7 +29,7 @@ select = "block"
 auto-signature-help = false
 
 [keys.insert]
-"C-d" = ":insert-output exec $SHELL -lc 'dbg_snippet'"
+"C-d" = ":insert-output exec $SHELL -lc 'dbg_snippet %{language}'"
 "C-k" = "signature_help"
 
 [keys.normal]

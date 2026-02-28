@@ -42,7 +42,7 @@ indent = { tab-width = 2, unit = "  " }
 [[language]]
 name = "python"
 language-servers = ["basedpyright", "ruff"]
-auto-format = false
+auto-format = true
 diagnostic-severity = "error"
 
 [language-server.basedpyright]

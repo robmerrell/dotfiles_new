@@ -112,7 +112,7 @@ keybinds clear-defaults=true {
 
     scroll {
         bind "e" { EditScrollback; SwitchToMode "normal"; }
-        bind "k" { Clear; SwitchToMode "normal"; }
+        bind "c" { Clear; SwitchToMode "normal"; }
         bind "s" { SwitchToMode "entersearch"; SearchInput 0; }
     }
 

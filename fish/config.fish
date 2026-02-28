@@ -46,11 +46,11 @@ set -x PATH $PATH $HOME/bin
 set -x PATH $PATH $HOME/projects/gh/elixir-ls
 set -x PATH $PATH $HOME/projects/gh/roc_nightly
 set -x PATH $PATH $HOME/.local/share/bob/nvim-bin
+set -x PATH $PATH /Applications/Postgres.app/Contents/Versions/17/bin
 
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
-
 
 switch (uname)
     case Linux
