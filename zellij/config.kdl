@@ -1,7 +1,7 @@
 keybinds clear-defaults=true {
     shared_except "locked" "scroll" "search" "tmux" {
         // tmux mode
-        bind "Ctrl space" { SwitchToMode "tmux"; }
+        bind "Ctrl q" { SwitchToMode "tmux"; }
 
         // floating pane
         bind "Alt o" { ToggleFloatingPanes; SwitchToMode "normal"; }
@@ -85,6 +85,14 @@ keybinds clear-defaults=true {
                 height        "90%"
             };
             SwitchToMode "normal";
+        }
+        
+        bind "Ctrl s" {
+            LaunchOrFocusPlugin "session-manager" {
+                floating true
+                move_to_focused_tab true
+            }
+            SwitchToMode "normal"
         }
     }
 
