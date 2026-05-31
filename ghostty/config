@@ -1,0 +1,126 @@
+# This is the configuration file for Ghostty.
+#
+# This template file has been automatically created at the following
+# path since Ghostty couldn't find any existing config files on your system:
+#
+#   /home/rob/.config/ghostty/config
+#
+# The template does not set any default options, since Ghostty ships
+# with sensible defaults for all options. Users should only need to set
+# options that they want to change from the default.
+#
+# Run `ghostty +show-config --default --docs` to view a list of
+# all available config options and their default values.
+#
+# Additionally, each config option is also explained in detail
+# on Ghostty's website, at https://ghostty.org/docs/config.
+#
+# Ghostty can reload the configuration while running by using the menu
+# options or the bound key (default: Command + Shift + comma on macOS and
+# Control + Shift + comma on other platforms). Not all config options can be
+# reloaded while running; some only apply to new windows and others may require
+# a full restart to take effect.
+
+# Config syntax crash course
+# ==========================
+# # The config file consists of simple key-value pairs,
+# # separated by equals signs.
+# font-family = Iosevka
+# window-padding-x = 2
+#
+# # Spacing around the equals sign does not matter.
+# # All of these are identical:
+# key=value
+# key= value
+# key =value
+# key = value
+#
+# # Any line beginning with a # is a comment. It's not possible to put
+# # a comment after a config option, since it would be interpreted as a
+# # part of the value. For example, this will have a value of "#123abc":
+# background = #123abc
+#
+# # Empty values are used to reset config keys to default.
+# key =
+#
+# # Some config options have unique syntaxes for their value,
+# # which is explained in the docs for that config option.
+# # Just for example:
+# resize-overlay-duration = 4s 200ms
+
+
+# Cursors
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
+ 
+bell-audio-volume = 0
+
+# Theme
+theme = TokyoNight Storm
+background = #24283b
+foreground = #c0caf5
+selection-background = #364a82
+selection-foreground = #c0caf5
+cursor-color = #c0caf5
+cursor-text = #1d202f
+cursor-style-blink = false
+palette = 0=#1d202f
+palette = 1=#f7768e
+palette = 2=#9ece6a
+palette = 3=#e0af68
+palette = 4=#7aa2f7
+palette = 5=#bb9af7
+palette = 6=#7dcfff
+palette = 7=#a9b1d6
+palette = 8=#4e5575
+palette = 9=#f7768e
+palette = 10=#9ece6a
+palette = 11=#e0af68
+palette = 12=#7aa2f7
+palette = 13=#bb9af7
+palette = 14=#7dcfff
+palette = 15=#c0caf5
+
+# Fonts
+font-family = RobotoMono Nerd Font
+
+# MacOS
+macos-titlebar-style = tabs
+
+# Linux
+gtk-titlebar-style = tabs
+gtk-wide-tabs = false
+
+# Keybinds -- I want Linux and Mac to match my most used bindings
+keybind = cmd+t=new_tab
+keybind = super+t=new_tab
+keybind = cmd+w=close_surface
+keybind = super+w=close_surface
+keybind = cmd+shift+right_bracket=next_tab
+keybind = super+shift+right_bracket=next_tab
+keybind = cmd+shift+left_bracket=previous_tab
+keybind = super+shift+left_bracket=previous_tab
+
+keybind = cmd+shift+d=new_split:right
+keybind = super+shift+d=new_split:right
+keybind = cmd+shift+s=new_split:down
+keybind = super+shift+s=new_split:down
+
+keybind = cmd+shift+h=goto_split:left
+keybind = super+shift+h=goto_split:left
+keybind = cmd+shift+l=goto_split:right
+keybind = super+shift+l=goto_split:right
+keybind = cmd+shift+k=goto_split:top
+keybind = super+shift+k=goto_split:top
+keybind = cmd+shift+j=goto_split:bottom
+keybind = super+shift+j=goto_split:bottom
+
+# Leader keybinds -- This maps closer to how I use zellij
+keybind = ctrl+a>v=new_split:right
+keybind = ctrl+a>s=new_split:down
+keybind = ctrl+a>h=goto_split:left
+keybind = ctrl+a>j=goto_split:bottom
+keybind = ctrl+a>k=goto_split:top
+keybind = ctrl+a>l=goto_split:right
+keybind = ctrl+a>comma=prompt_tab_title
