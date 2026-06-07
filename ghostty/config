@@ -124,3 +124,4 @@ keybind = ctrl+a>j=goto_split:bottom
 keybind = ctrl+a>k=goto_split:top
 keybind = ctrl+a>l=goto_split:right
 keybind = ctrl+a>comma=prompt_tab_title
+keybind = ctrl+a>x=close_surface
