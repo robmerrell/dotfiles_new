@@ -89,7 +89,9 @@ font-family = RobotoMono Nerd Font
 macos-titlebar-style = tabs
 
 # Linux
-gtk-titlebar-style = tabs
+# gtk-titlebar-style = tabs
+window-theme = system
+gtk-titlebar = false
 gtk-wide-tabs = false
 
 # Keybinds -- I want Linux and Mac to match my most used bindings
