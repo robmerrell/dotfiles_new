@@ -68,7 +68,7 @@ function fish_prompt
         set arrow_color "$red"
     end
 
-    set -l arrow "$arrow_color➜ "
+    set -l arrow "$arrow_color$(hostname) ➜ "
     if fish_is_root_user
         set arrow "$arrow_color# "
     end
@@ -86,5 +86,5 @@ function fish_prompt
         end
     end
 
-    echo -n -s $arrow ' '$cwd $repo_info $normal ' '
+    echo -n -s $arrow $cwd $repo_info $normal ' '
 end

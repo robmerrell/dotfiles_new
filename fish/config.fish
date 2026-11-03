@@ -60,5 +60,4 @@ switch (uname)
     case Darwin
         ~/.local/bin/mise activate fish | source
         set -x PATH $PATH /opt/homebrew/bin
-        set -x PATH $PATH /Applications/Postgres.app/Contents/Versions/16/bin
 end
