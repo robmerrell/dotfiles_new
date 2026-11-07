@@ -84,6 +84,7 @@ palette = 15=#c0caf5
 
 # Fonts
 font-family = RobotoMono Nerd Font
+font-size = 14
 
 # MacOS
 macos-titlebar-style = tabs
@@ -119,11 +120,15 @@ keybind = cmd+shift+j=goto_split:bottom
 keybind = super+shift+j=goto_split:bottom
 
 # Leader keybinds -- This maps closer to how I use zellij
-keybind = ctrl+a>v=new_split:right
-keybind = ctrl+a>s=new_split:down
-keybind = ctrl+a>h=goto_split:left
-keybind = ctrl+a>j=goto_split:bottom
-keybind = ctrl+a>k=goto_split:top
-keybind = ctrl+a>l=goto_split:right
-keybind = ctrl+a>comma=prompt_tab_title
-keybind = ctrl+a>x=close_surface
+# keybind = ctrl+a>v=new_split:right
+# keybind = ctrl+a>s=new_split:down
+# keybind = ctrl+a>h=goto_split:left
+# keybind = ctrl+a>j=goto_split:bottom
+# keybind = ctrl+a>k=goto_split:top
+# keybind = ctrl+a>l=goto_split:right
+# keybind = ctrl+a>comma=prompt_tab_title
+# keybind = ctrl+a>x=close_surface
+
+# Always send a raw ESC for ctrl+[ so apps using the kitty keyboard
+# protocol (helix, also over ssh) treat it as Escape, not C-[
+keybind = ctrl+bracket_left=text:\x1b

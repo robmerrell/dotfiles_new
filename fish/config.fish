@@ -33,7 +33,6 @@ set -x FZF_DEFAULT_OPTS $FZF_DEFAULT_OPTS \
   --color=spinner:#ff007c"
 
 # aliases
-alias vi='nvim'
 alias vim='nvim'
 alias ls='eza --icons=auto -l'
 alias ll='eza --icons=auto -la'
