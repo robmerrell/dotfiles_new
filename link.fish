@@ -14,3 +14,9 @@ for dir in fish fuzzel ghostty helix kak niri noctalia nvim tmux wezterm zellij
 
     ln -s $dotfiles/$dir $target
 end
+
+# bastille templates (FreeBSD only, needs root)
+if test (uname) = FreeBSD
+    doas mkdir -p /usr/local/bastille/templates
+    doas ln -sfn ~/projects/dotfiles_new/bastille /usr/local/bastille/templates/rob
+end
