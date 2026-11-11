@@ -2,7 +2,6 @@
 set -gx EDITOR hx
 set -gx COLORTERM truecolor
 set -gx HELIX_RUNTIME $HOME/projects/gh/helix/runtime
-set -gx SKIM_DEFAULT_COMMAND rg --files
 
 if test -f ~/.config/fish/secrets.fish
     source ~/.config/fish/secrets.fish
@@ -34,7 +33,6 @@ set -x FZF_DEFAULT_OPTS $FZF_DEFAULT_OPTS \
 
 # aliases
 alias vi='nvim'
-alias vim='nvim'
 alias ls='eza --icons=auto -l'
 alias ll='eza --icons=auto -la'
 
@@ -44,9 +42,7 @@ set -x PATH $PATH $GOPATH/bin
 set -x PATH $PATH $HOME/.local/bin
 set -x PATH $PATH $HOME/.cargo/bin
 set -x PATH $PATH $HOME/bin
-set -x PATH $PATH $HOME/projects/gh/elixir-ls
 set -x PATH $PATH $HOME/projects/gh/roc_nightly
-set -x PATH $PATH $HOME/.local/share/bob/nvim-bin
 set -x PATH $PATH /Applications/Postgres.app/Contents/Versions/17/bin
 
 if status is-interactive
@@ -60,4 +56,6 @@ switch (uname)
     case Darwin
         ~/.local/bin/mise activate fish | source
         set -x PATH $PATH /opt/homebrew/bin
+    case FreeBSD
+        /usr/local/bin/mise activate fish | source
 end

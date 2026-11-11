@@ -1,0 +1,17 @@
+PKG claude-code curl eza fzf fish git gh jq mise ripgrep rust wget yazi zellij
+
+# install oh-my-fish
+CMD curl -fsSL https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install -o /tmp/omf-install
+CMD fish /tmp/omf-install --noninteractive --yes
+CMD rm /tmp/omf-install
+
+# change the shell
+CMD chsh -s /usr/local/bin/fish root
+
+# git settings
+CMD git config --global user.name "Rob Merrell"
+CMD git config --global user.email "rob@robm.dev"
+
+# create projects and get helix fork
+CMD mkdir -p /root/projects/gh
+CMD git clone -b steel-event-system https://github.com/mattwparas/helix.git /root/projects/gh/helix
