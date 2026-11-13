@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- This page contains PR source code, possibly from a private repo, and loads Shiki
+     from a CDN. The policy limits where any script on the page can send data:
+     only the two Shiki CDNs, with no images, fonts, frames, or form posts. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'wasm-unsafe-eval' https://esm.sh https://cdn.jsdelivr.net; connect-src https://esm.sh https://cdn.jsdelivr.net; style-src 'unsafe-inline'; img-src 'none'; font-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PR Walkthrough</title>
+<style>
+/* Fallback palette (Tokyo Night Storm) for the first paint. applyChrome() then sets
+   every variable from the active theme's own colors. */
+:root{
+  color-scheme:dark;
+  --bg:#1b1e2e;--panel:#1f2335;--card:#24283b;--code:#24283b;--ink:#c0caf5;--mute:#8e95b8;--ln:#5f6792;
+  --line:#363b54;--soft:#2c3149;--sel:#2e3b63;--acc:#7aa2f7;--btn:#3d59a1;--btn-ink:#ffffff;
+  --add:#9ece6a;--del:#f7768e;--warn:#e0af68;--ok:#9ece6a;--bad:#f7768e;
+  --add-bg:#2c3539;--del-bg:#3a2c40;--add-gut:#34413d;--del-gut:#4a3048;--add-word:#455840;--del-word:#663a53;--warn-bg:#3b3638;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+code,pre,.mono{font-family:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace}
+header{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 20px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+header h1{font-size:16px;margin:0;font-weight:650}
+header .meta{color:var(--mute);font-size:13px}
+header .sp{flex:1}
+.btn{font:inherit;font-size:13px;padding:6px 12px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--soft);text-decoration:none}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--btn);border-color:var(--btn);color:var(--btn-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+select.theme{font:inherit;font-size:13px;padding:5px 8px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:220px}
+.status{font-size:12px;color:var(--mute)}
+.banner{padding:8px 20px;font-size:13px;background:var(--warn-bg);color:var(--warn);border-bottom:1px solid var(--line)}
+.banner.bad{background:var(--del-bg);color:var(--bad)}
+.wrap{display:grid;grid-template-columns:290px minmax(0,1fr)}
+nav{background:var(--panel);border-right:1px solid var(--line);padding:16px 12px;position:sticky;top:var(--hdr,53px);height:calc(100vh - var(--hdr,53px));overflow:auto}
+.summary{font-size:13.5px;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px 12px;margin-bottom:14px}
+.label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);font-weight:600;margin-bottom:4px}
+.step{display:flex;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;margin-bottom:2px;align-items:flex-start}
+.step:hover{background:var(--soft)}
+.step.active{background:var(--sel)}
+.step .n{flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;font-size:12px;color:var(--mute);margin-top:1px}
+.step.done .n{background:var(--ok);border-color:var(--ok);color:var(--card)}
+.step.unassigned .n{border-color:var(--bad);color:var(--bad)}
+.step .t{font-weight:600;font-size:13.5px}
+.step .s{font-size:12px;color:var(--mute)}
+.step .fl{color:var(--warn)}
+.box{margin-top:14px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:12.5px;background:var(--card)}
+.bar{height:6px;background:var(--soft);border-radius:3px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .2s}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.keys{color:var(--mute);font-size:12px;margin-top:12px;line-height:1.8}
+.ask{margin-top:12px;font-size:12.5px;color:var(--mute);border-left:3px solid var(--acc);padding:2px 10px}
+.ask strong{color:var(--ink)}
+kbd{font:11px ui-monospace,Menlo,monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--card);color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{font:inherit;font-size:12.5px;padding:5px 10px;border:0;background:var(--card);color:var(--mute);cursor:pointer}
+.seg button.on{background:var(--sel);color:var(--ink);font-weight:600}
+main{padding:22px 28px 80px;min-width:0}
+.stephead{margin:0 0 4px;font-size:19px}
+.stephead .of{color:var(--mute);font-weight:500;font-size:14px;margin-left:6px}
+.why{border-left:3px solid var(--acc);padding:2px 12px;margin:6px 0 18px}
+.section{margin-bottom:34px}
+.hunk{background:var(--card);border:1px solid var(--line);border-radius:9px;margin-bottom:14px;overflow:hidden}
+.hunk.reviewed{opacity:.6}
+.hunk.reviewed:hover{opacity:1}
+.hh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:12.5px;background:var(--panel)}
+.hid{font:600 11.5px ui-monospace,Menlo,monospace;background:var(--soft);border-radius:5px;padding:1px 6px;color:var(--ink)}
+.path{font:600 12.5px ui-monospace,Menlo,monospace;word-break:break-all}
+.tag{font-size:11px;padding:0 6px;border-radius:4px;border:1px solid var(--line);color:var(--mute)}
+.tag.added{color:var(--add);border-color:currentColor}.tag.deleted{color:var(--del);border-color:currentColor}
+.ctx{color:var(--mute);font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.hh .sp{flex:1}
+.hh label{display:inline-flex;gap:5px;align-items:center;cursor:pointer;color:var(--mute);user-select:none}
+.ann{padding:6px 12px;font-size:13px;border-bottom:1px solid var(--line)}
+.ann.note{color:var(--mute)}
+.ann.flag{background:var(--warn-bg);color:var(--warn)}
+.also{padding:4px 12px;font-size:12px;color:var(--mute);border-bottom:1px solid var(--line)}
+.also a{cursor:pointer}
+.code{overflow-x:auto;background:var(--code)}
+table.d{border-collapse:collapse;width:100%;font:12.5px/1.6 ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,Consolas,monospace;color:var(--ink)}
+table.d td{padding:0 10px;white-space:pre;vertical-align:top}
+table.d td.ln{width:1%;text-align:right;color:var(--ln);user-select:none;padding:0 8px}
+table.d td.sg{width:1%;padding:0 4px 0 6px;user-select:none;color:var(--ln)}
+tr.a td{background:var(--add-bg)}tr.a td.ln,tr.a td.sg{background:var(--add-gut);color:var(--add)}
+tr.r td{background:var(--del-bg)}tr.r td.ln,tr.r td.sg{background:var(--del-gut);color:var(--del)}
+tr.a .wd{background:var(--add-word);border-radius:2px}
+tr.r .wd{background:var(--del-word);border-radius:2px}
+tr.m td{color:var(--mute);font-style:italic}
+.hc{display:inline-block;font-size:10px;line-height:1.3;padding:0 3px;margin:0 1px;border-radius:3px;background:var(--bad);color:var(--card);font-style:normal;font-weight:700;vertical-align:1px}
+.more{display:block;width:100%;padding:7px;border:0;border-top:1px dashed var(--line);background:var(--soft);color:var(--acc);font:inherit;font-size:12.5px;cursor:pointer}
+.ph{padding:10px 12px;color:var(--mute);font-style:italic;font-size:13px}
+.foot{display:flex;justify-content:space-between;gap:10px;margin-top:10px}
+#tip{position:fixed;z-index:50;max-width:300px;padding:6px 9px;border-radius:6px;font-size:12.5px;line-height:1.4;
+  background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:0 4px 16px rgba(0,0,0,.28);
+  pointer-events:none;opacity:0;transition:opacity .08s}
+#tip.on{opacity:1}
+#tip kbd{margin-left:2px}
+@media (max-width:820px){
+  .wrap{grid-template-columns:1fr}
+  nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  main{padding:16px}
+  header{position:static}
+}
+</style>
+</head>
+<body>
+<header id="hdr"></header>
+<div id="banners"></div>
+<div class="wrap">
+  <nav id="nav"></nav>
+  <main id="main"></main>
+</div>
+<div id="tip" role="tooltip"></div>
+<script id="prw-data" type="application/json">__PRW_DATA__</script>
+<script>
+(function(){
+"use strict";
+const SHIKI_URLS = ["https://esm.sh/shiki@4.5.0", "https://cdn.jsdelivr.net/npm/shiki@4.5.0/+esm"];
+const AUTO_DARK = "catppuccin-mocha", AUTO_LIGHT = "catppuccin-latte";
+
+const D = JSON.parse(document.getElementById("prw-data").textContent);
+const pr = D.pr, plan = D.plan, sources = D.sources || {};
+const H = {}; D.hunks.forEach(h => H[h.id] = h);
+const F = {}; D.files.forEach(f => F[f.id] = f);
+const notes = plan.notes || {}, flags = plan.flags || {};
+
+// ---------------------------------------------------------------- steps
+// Steps from the plan, plus a backstop step for anything the plan missed.
+const steps = plan.steps.map(s => ({title: s.title, why: s.why, hunks: s.hunks.filter(id => H[id])}));
+const placed = new Set(steps.flatMap(s => s.hunks));
+const unassigned = D.hunks.map(h => h.id).filter(id => !placed.has(id));
+if (unassigned.length) steps.push({title: "Unassigned", why: "These hunks were not placed in the plan. Review them here so nothing is skipped.", hunks: unassigned, unassigned: true});
+const stepOf = {}; steps.forEach((s, i) => s.hunks.forEach(id => stepOf[id] = i));
+
+// ---------------------------------------------------------------- storage (per viewer; safe if unavailable)
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : v; } catch (e) { return d; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch (e) {} },
+};
+// Progress is keyed to the exact head commit, so a new push starts fresh.
+const KEY = "prw:" + pr.repo + "#" + pr.number + "@" + (pr.head_sha || "");
+let reviewed = new Set();
+try { reviewed = new Set(JSON.parse(store.get(KEY, "[]"))); } catch (e) {}
+const saveReviewed = () => store.set(KEY, JSON.stringify([...reviewed]));
+
+let cur = 0;
+let mode = store.get("prw:mode", "step");
+// A theme picked in the menu wins; otherwise the default render.py baked in
+// (config.json, else Tokyo Night Storm). Only explicit picks are saved.
+let themePref = store.get("prw:theme-choice", null) || D.default_theme || "tokyo-night-storm";
+const expanded = new Set();
+
+const esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const plural = (n, w) => n + " " + w + (n === 1 ? "" : "s");
+
+// ---------------------------------------------------------------- word-level diff
+// Pair each run of removed lines with the following run of added lines and mark the
+// changed middle (common prefix/suffix excluded), like GitHub's intra-line highlight.
+const wordRanges = {}; // hunkId -> {lineIndex: [start, end]}
+function computeWordRanges(h){
+  const out = {}, L = h.lines;
+  let i = 0;
+  while (i < L.length) {
+    if (L[i].t !== "-") { i++; continue; }
+    const delStart = i; while (i < L.length && L[i].t === "-") i++;
+    const addStart = i; while (i < L.length && L[i].t === "+") i++;
+    const pairs = Math.min(addStart - delStart, i - addStart);
+    for (let k = 0; k < pairs; k++) {
+      const a = L[delStart + k].s, b = L[addStart + k].s;
+      let p = 0; while (p < a.length && p < b.length && a[p] === b[p]) p++;
+      let s = 0; while (s < a.length - p && s < b.length - p && a[a.length-1-s] === b[b.length-1-s]) s++;
+      const ra = [p, a.length - s], rb = [p, b.length - s];
+      // Skip when (nearly) the whole line changed: highlighting everything adds nothing.
+      const changed = Math.max(ra[1]-ra[0], rb[1]-rb[0]) / Math.max(1, a.length, b.length);
+      if (changed > 0.75 || (ra[1] <= ra[0] && rb[1] <= rb[0])) continue;
+      if (ra[1] > ra[0]) out[delStart + k] = ra;
+      if (rb[1] > rb[0]) out[addStart + k] = rb;
+    }
+  }
+  return out;
+}
+D.hunks.forEach(h => wordRanges[h.id] = computeWordRanges(h));
+
+// Render a line from tokens [{content,color,fontStyle}], wrapping the changed range.
+function lineHTML(tokens, range){
+  let pos = 0, html = "";
+  for (const t of tokens) {
+    const text = t.content, start = pos, end = pos + text.length;
+    pos = end;
+    if (!text) continue;
+    let style = "";
+    if (t.color) style += "color:" + t.color + ";";
+    if (t.fontStyle) {
+      if (t.fontStyle & 1) style += "font-style:italic;";
+      if (t.fontStyle & 2) style += "font-weight:bold;";
+      if (t.fontStyle & 4) style += "text-decoration:underline;";
+    }
+    const pieces = [];
+    if (range && range[0] < end && range[1] > start) {
+      const a = Math.max(range[0], start) - start, b = Math.min(range[1], end) - start;
+      if (a > 0) pieces.push([text.slice(0, a), false]);
+      pieces.push([text.slice(a, b), true]);
+      if (b < text.length) pieces.push([text.slice(b), false]);
+    } else pieces.push([text, false]);
+    for (const [s, w] of pieces) {
+      if (!s) continue;
+      const cls = w ? ' class="wd"' : "";
+      html += (style || w) ? `<span${cls}${style ? ` style="${style}"` : ""}>${escHidden(s)}</span>` : escHidden(s);
+    }
+  }
+  return html;
+}
+
+// Invisible characters that can make code display differently than it runs
+// ("Trojan Source"). Shown as visible red markers instead of rendering silently.
+const HIDDEN_RE = /[­​-‏‪-‮⁠-⁤⁦-⁩﻿]/g;
+const HIDDEN_NAME = {0x202a:"left-to-right embedding",0x202b:"right-to-left embedding",0x202c:"pop directional formatting",
+  0x202d:"left-to-right override",0x202e:"right-to-left override",0x2066:"left-to-right isolate",0x2067:"right-to-left isolate",
+  0x2068:"first strong isolate",0x2069:"pop directional isolate",0x200b:"zero-width space",0x200c:"zero-width non-joiner",
+  0x200d:"zero-width joiner",0x200e:"left-to-right mark",0x200f:"right-to-left mark",0x2060:"word joiner",0xfeff:"byte order mark",0xad:"soft hyphen"};
+function escHidden(s){
+  return esc(s).replace(HIDDEN_RE, ch => {
+    const cp = ch.codePointAt(0), hex = "U+" + cp.toString(16).toUpperCase().padStart(4, "0");
+    const name = HIDDEN_NAME[cp] || "invisible character";
+    return `<span class="hc"${tip("Hidden character " + hex + " (" + name + "). It can make code display differently than it runs.")}>${hex}</span>`;
+  });
+}
+const plain = s => [{content: s}];
+
+// ---------------------------------------------------------------- Shiki
+let shiki = null, hl = null, themeList = [], langAlias = {}, currentTheme = null, themeObj = null;
+const tokenCache = new Map();
+const EXT = {yml:"yaml",mjs:"javascript",cjs:"javascript",mts:"typescript",cts:"typescript",h:"c",hpp:"cpp",cc:"cpp",
+  hh:"cpp",kts:"kotlin",exs:"elixir",tf:"hcl",tfvars:"hcl",zsh:"shellscript",bash:"shellscript",sh:"shellscript",
+  md:"markdown",mdx:"mdx",jsonc:"jsonc",json5:"json5",cfg:"ini",conf:"ini",gql:"graphql",proto:"proto",vue:"vue",
+  svelte:"svelte",astro:"astro",tsx:"tsx",jsx:"jsx",rs:"rust",py:"python",rb:"ruby",kt:"kotlin",cs:"csharp",ex:"elixir",
+  erl:"erlang",hs:"haskell",ml:"ocaml",clj:"clojure",scss:"scss",sass:"sass",less:"less",ps1:"powershell",bat:"bat",
+  sql:"sql",lua:"lua",nix:"nix",zig:"zig",dart:"dart",swift:"swift",scala:"scala",r:"r",pl:"perl",php:"php",
+  go:"go",java:"java",c:"c",cpp:"cpp",html:"html",css:"css",xml:"xml",toml:"toml",ini:"ini",dockerfile:"dockerfile",
+  makefile:"make",mk:"make",cmake:"cmake",fish:"fish",vim:"viml",tex:"latex",diff:"diff",csv:"csv",txt:"text"};
+function langFor(path){
+  const base = path.split("/").pop().toLowerCase();
+  let id = null;
+  if (base === "dockerfile" || base.startsWith("dockerfile.") || base.endsWith(".dockerfile")) id = "dockerfile";
+  else if (base === "makefile" || base === "gnumakefile") id = "make";
+  else if (base === "cmakelists.txt") id = "cmake";
+  else if (base === ".gitignore" || base === ".gitattributes") id = "text";
+  else { const ext = base.includes(".") ? base.split(".").pop() : ""; id = EXT[ext] || ext; }
+  return langAlias[id] || null;
+}
+
+async function loadShiki(){
+  for (const url of SHIKI_URLS) {
+    try { return await import(url); } catch (e) { /* try the next CDN */ }
+  }
+  return null;
+}
+
+function resolveTheme(){
+  if (themePref !== "auto") return themePref;
+  return matchMedia("(prefers-color-scheme: dark)").matches ? AUTO_DARK : AUTO_LIGHT;
+}
+
+// Derive the whole page palette from the theme's own editor colors.
+function applyChrome(t){
+  const c = t.colors || {};
+  const bg = t.bg || c["editor.background"] || "#1e1e2e";
+  const fg = t.fg || c["editor.foreground"] || "#cdd6f4";
+  const dark = t.type !== "light";
+  const mix = (a, pct, b) => `color-mix(in srgb, ${a} ${pct}%, ${b})`;
+  const pick = (...keys) => { for (const k of keys) if (c[k]) return c[k]; return null; };
+  const acc = pick("textLink.foreground", "focusBorder", "button.background", "terminal.ansiBlue") || (dark ? "#89b4fa" : "#1e66f5");
+  const add = pick("gitDecoration.addedResourceForeground", "terminal.ansiGreen", "editorGutter.addedBackground") || (dark ? "#3fb950" : "#1a7f37");
+  const del = pick("gitDecoration.deletedResourceForeground", "terminal.ansiRed", "editorGutter.deletedBackground") || (dark ? "#f85149" : "#cf222e");
+  const warn = pick("editorWarning.foreground", "terminal.ansiYellow", "list.warningForeground") || (dark ? "#d29922" : "#9a6700");
+  const side = pick("sideBar.background", "activityBar.background") || mix(bg, 94, dark ? "black" : fg);
+  const v = {
+    "--code": bg, "--card": bg, "--panel": side,
+    "--bg": mix(side, 88, dark ? "black" : fg),
+    "--ink": fg, "--mute": mix(fg, 62, bg), "--ln": mix(fg, 42, bg),
+    "--line": mix(fg, 14, bg), "--soft": mix(fg, 8, bg), "--sel": mix(acc, 18, bg),
+    "--acc": acc, "--btn": pick("button.background") || acc, "--btn-ink": pick("button.foreground") || bg,
+    "--add": add, "--del": del, "--ok": add, "--bad": del, "--warn": warn,
+    "--add-bg": mix(add, 12, bg), "--del-bg": mix(del, 12, bg),
+    "--add-gut": mix(add, 22, bg), "--del-gut": mix(del, 22, bg),
+    "--add-word": mix(add, 34, bg), "--del-word": mix(del, 34, bg),
+    "--warn-bg": mix(warn, 14, bg),
+  };
+  const root = document.documentElement.style;
+  for (const k in v) root.setProperty(k, v[k]);
+  root.setProperty("color-scheme", dark ? "dark" : "light");
+}
+
+async function setTheme(pref, explicit){
+  themePref = pref;
+  if (explicit) store.set("prw:theme-choice", pref);
+  if (!hl) { applyEmbeddedChrome(); return; }
+  const id = resolveTheme();
+  try {
+    if (!hl.getLoadedThemes().includes(id)) {
+      const custom = (D.custom_themes || []).find(t => t.name === id);
+      await hl.loadTheme(custom || id);
+    }
+    currentTheme = id; themeObj = hl.getTheme(id);
+    applyChrome(themeObj);
+    document.querySelectorAll(".hunk").forEach(el => delete el.dataset.hl);
+    highlightVisible();
+  } catch (e) { setStatus("Couldn't load theme " + id); }
+}
+
+// Bundled themes (e.g. Tokyo Night Storm) are embedded in the page, so their
+// page colors apply immediately and still work offline.
+function applyEmbeddedChrome(){
+  const t = (D.custom_themes || []).find(x => x.name === resolveTheme());
+  if (t) applyChrome(t);
+}
+
+// Tokens for one side ("old"/"new") of a hunk: lineNo -> tokens.
+// Whole-file tokenizing when the full source is available (multi-line constructs
+// come out right); otherwise tokenize just that side of the hunk as a block.
+async function sideTokens(h, side, lang){
+  const key = currentTheme + "|" + (sources[h.file_id] && sources[h.file_id][side] != null ? "f:" + h.file_id : "h:" + h.id) + "|" + side;
+  if (tokenCache.has(key)) return tokenCache.get(key);
+  const src = sources[h.file_id] && sources[h.file_id][side];
+  const map = new Map();
+  if (src != null) {
+    const toks = hl.codeToTokens(src, {lang, theme: currentTheme}).tokens;
+    toks.forEach((line, i) => map.set(i + 1, line));
+  } else {
+    const want = side === "new" ? "+" : "-";
+    const rows = h.lines.filter(l => l.t === " " || l.t === want);
+    const toks = hl.codeToTokens(rows.map(l => l.s).join("\n"), {lang, theme: currentTheme}).tokens;
+    rows.forEach((l, i) => map.set(side === "new" ? l.n : l.o, toks[i] || plain(l.s)));
+  }
+  tokenCache.set(key, map);
+  return map;
+}
+
+async function highlightHunk(el){
+  if (!hl || el.dataset.hl === currentTheme) return;
+  const id = el.dataset.id, h = H[id], f = F[h.file_id];
+  if (!h || h.placeholder || f.generated) { el.dataset.hl = currentTheme; return; }
+  const lang = langFor(f.path);
+  if (!lang) { el.dataset.hl = currentTheme; return; }
+  try {
+    if (!hl.getLoadedLanguages().includes(lang)) await hl.loadLanguage(lang);
+    const [oldM, newM] = await Promise.all([sideTokens(h, "old", lang), sideTokens(h, "new", lang)]);
+    const wr = wordRanges[id];
+    el.querySelectorAll("td.cx").forEach(td => {
+      const i = +td.dataset.i, l = h.lines[i];
+      const toks = (l.t === "-" ? oldM.get(l.o) : newM.get(l.n)) || plain(l.s);
+      td.innerHTML = lineHTML(toks, wr[i]);
+    });
+    el.dataset.hl = currentTheme;
+  } catch (e) { el.dataset.hl = currentTheme; }
+}
+
+const io = "IntersectionObserver" in window ? new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) highlightHunk(e.target); });
+}, {rootMargin: "600px 0px"}) : null;
+function highlightVisible(){
+  document.querySelectorAll(".hunk").forEach(el => {
+    if (io) { io.unobserve(el); io.observe(el); } else highlightHunk(el);
+  });
+}
+
+let statusText = "Loading highlighter…";
+function setStatus(t){ statusText = t; const s = document.getElementById("status"); if (s) s.textContent = t; }
+
+function themeOptions(){
+  const opt = (id, label) => `<option value="${esc(id)}" ${themePref === id ? "selected" : ""}>${esc(label)}</option>`;
+  let html = opt("auto", "Auto: Catppuccin (follows system)");
+  if (!themeList.length) return html;
+  const fav = ["catppuccin-mocha","catppuccin-macchiato","catppuccin-frappe","catppuccin-latte","tokyo-night-storm","tokyo-night",
+               "rose-pine","rose-pine-moon","rose-pine-dawn","kanagawa-wave","gruvbox-dark-medium","everforest-dark","nord",
+               "one-dark-pro","dracula","github-dark-dimmed","github-light","night-owl","vitesse-dark","solarized-light"];
+  const byId = Object.fromEntries(themeList.map(t => [t.id, t]));
+  const favs = fav.filter(id => byId[id]);
+  html += `<optgroup label="Favorites">${favs.map(id => opt(id, byId[id].displayName)).join("")}</optgroup>`;
+  for (const type of ["dark", "light"]) {
+    const list = themeList.filter(t => t.type === type).sort((a, b) => a.displayName.localeCompare(b.displayName));
+    html += `<optgroup label="${type === "dark" ? "All dark" : "All light"}">${list.map(t => opt(t.id, t.displayName)).join("")}</optgroup>`;
+  }
+  return html;
+}
+
+async function initShiki(){
+  shiki = await loadShiki();
+  if (!shiki) { setStatus("Syntax highlighting unavailable (offline?)"); return; }
+  try {
+    themeList = shiki.bundledThemesInfo.map(t => ({id: t.id, displayName: t.displayName, type: t.type}));
+    (D.custom_themes || []).forEach(t => themeList.push({id: t.name, displayName: t.displayName || t.name, type: t.type || "dark"}));
+    shiki.bundledLanguagesInfo.forEach(l => { langAlias[l.id] = l.id; (l.aliases || []).forEach(a => langAlias[a] = l.id); });
+    langAlias.text = null;
+    hl = await shiki.createHighlighter({themes: [], langs: []});
+    const sel = document.getElementById("theme");
+    if (sel) sel.innerHTML = themeOptions();
+    await setTheme(themePref);
+    setStatus("");
+  } catch (e) { hl = null; setStatus("Syntax highlighting failed to start"); }
+}
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (themePref === "auto") setTheme("auto"); });
+
+// ---------------------------------------------------------------- hover hints
+// Any element with data-tip gets a themed tooltip on hover or keyboard focus.
+// "[k]" in the text renders as a key cap.
+const tipEl = document.getElementById("tip");
+let tipFor = null, tipTimer = null;
+function showTip(el){
+  tipFor = el;
+  tipEl.innerHTML = esc(el.dataset.tip).replace(/\[(\w)\]/g, "<kbd>$1</kbd>");
+  const r = el.getBoundingClientRect();
+  tipEl.style.left = "0px"; tipEl.style.top = "0px"; tipEl.classList.add("on");
+  const tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+  let x = r.left + r.width / 2 - tw / 2, y = r.bottom + 8;
+  if (y + th > innerHeight - 8) y = r.top - th - 8;   // flip above when there's no room below
+  x = Math.max(8, Math.min(x, innerWidth - tw - 8));
+  tipEl.style.left = x + "px"; tipEl.style.top = y + "px";
+}
+function hideTip(){ clearTimeout(tipTimer); tipFor = null; tipEl.classList.remove("on"); }
+document.addEventListener("mouseover", e => {
+  const el = e.target.closest && e.target.closest("[data-tip]");
+  if (el === tipFor) return;
+  clearTimeout(tipTimer);
+  if (!el) { hideTip(); return; }
+  tipTimer = setTimeout(() => showTip(el), 250);
+});
+document.addEventListener("focusin", e => { const el = e.target.closest && e.target.closest("[data-tip]"); if (el) showTip(el); });
+document.addEventListener("focusout", hideTip);
+addEventListener("scroll", hideTip, true);
+const tip = t => ` data-tip="${esc(t)}" aria-label="${esc(t.replace(/\[(\w)\]/g, "$1"))}"`;
+
+// ---------------------------------------------------------------- GitHub links
+// Deep link into GitHub's Files tab at the first changed line, where comments are left.
+function ghLink(h){
+  const f = F[h.file_id];
+  let anchor = f.anchor;
+  const first = h.lines.find(l => l.t === "+" || l.t === "-");
+  if (first) anchor += first.t === "+" ? "R" + first.n : "L" + first.o;
+  return pr.url + "/files#" + anchor;
+}
+
+// ---------------------------------------------------------------- rendering
+function header(){
+  const st = pr.isDraft ? "draft" : (pr.state || "").toLowerCase();
+  document.getElementById("hdr").innerHTML =
+    `<h1>#${esc(pr.number)} ${esc(pr.title)}</h1>
+     <span class="meta"><span${tip("Repository")}>${esc(pr.repo)}</span> · <span${tip("PR branch → the branch it merges into")}>${esc(pr.headRefName)} → ${esc(pr.baseRefName)}</span> · ${esc(st)} · ${plural(D.files.length,"file")} · ${plural(D.hunks.length,"hunk")} · <span${tip("Lines added / removed")}><span style="color:var(--add)">+${pr.additions}</span> <span style="color:var(--del)">−${pr.deletions}</span></span> · <span class="mono"${tip("Commit this review was built from. Re-run the skill after new pushes.")}>${esc((pr.head_sha||"").slice(0,8))}</span>${pr.source === "gh" ? ` · <span${tip("Built from GitHub's diff (not a local clone), so only hunks are available")}>gh diff</span>` : ""}</span>
+     <span class="sp"></span>
+     <span class="status" id="status">${esc(statusText)}</span>
+     <select class="theme" id="theme"${tip("Color theme for the code and the page. Your pick is remembered in this browser. Set the default in ~/.config/pr-walkthrough/config.json.")}>${themeOptions()}</select>
+     <span class="seg"><button data-mode="step" class="${mode==="step"?"on":""}"${tip("Step view: one review step at a time, in the planned order [a]")}>Step</button><button data-mode="all" class="${mode==="all"?"on":""}"${tip("All view: every step on one scrolling page, still in the planned order [a]")}>All</button></span>
+     <a class="btn primary" href="${esc(pr.url)}/files" target="_blank" rel="noopener"${tip("Open the PR's Files changed tab on GitHub to comment or submit a review")}>Open PR on GitHub ↗</a>`;
+  document.querySelectorAll(".seg button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+  document.getElementById("theme").onchange = e => setTheme(e.target.value, true);
+  const ban = [];
+  const checks = D.checks || {};
+  (checks.errors || []).forEach(e => ban.push(`<div class="banner bad">⚠ ${esc(e)}</div>`));
+  if (unassigned.length) ban.push(`<div class="banner bad">⚠ ${plural(unassigned.length,"hunk")} not in the plan, shown in the "Unassigned" step.</div>`);
+  (checks.warnings || []).forEach(w => ban.push(`<div class="banner">${esc(w)}</div>`));
+  document.getElementById("banners").innerHTML = ban.join("");
+  const hh = document.getElementById("hdr").offsetHeight;
+  if (hh) document.documentElement.style.setProperty("--hdr", hh + "px");
+}
+
+function nav(){
+  const total = D.hunks.length, done = D.hunks.filter(h => reviewed.has(h.id)).length;
+  const items = steps.map((s, i) => {
+    const n = s.hunks.length, r = s.hunks.filter(id => reviewed.has(id)).length;
+    const fl = s.hunks.filter(id => flags[id]).length;
+    const isDone = n && r === n;
+    return `<div class="step ${i===cur&&mode==="step"?"active":""} ${isDone?"done":""} ${s.unassigned?"unassigned":""}" data-i="${i}" tabindex="0"${tip(s.why)}>
+      <div class="n">${isDone ? "✓" : (s.unassigned ? "!" : i+1)}</div>
+      <div><div class="t">${esc(s.title)}</div>
+      <div class="s">${r ? r + "/" : ""}${plural(n,"hunk")}${fl ? ` · <span class="fl">⚠ ${fl}</span>` : ""}</div></div></div>`;
+  }).join("");
+  document.getElementById("nav").innerHTML =
+    `<div class="summary"><div class="label">What this PR does</div>${esc(plan.summary)}</div>
+     <div class="label" style="padding:0 10px">Review order</div>${items}
+     <div class="box"><strong>Progress</strong>
+       <div class="bar"${tip("Hunks you've marked reviewed. Saved in this browser; resets when new commits are pushed.")}><i style="width:${total ? done/total*100 : 0}%"></i></div>
+       ${done} / ${plural(total,"hunk")} reviewed<br>
+       ${unassigned.length ? `<span class="bad"${tip("The plan missed these hunks. They're in the Unassigned step so nothing is skipped.")}>⚠ ${unassigned.length} unassigned</span>` : `<span class="ok"${tip("Coverage check: every hunk in the diff is in exactly one step, and the file list matches GitHub's")}>✓ every hunk is in a step</span>`}
+     </div>
+     <div class="ask"><strong>Questions?</strong> Ask in your Claude session using the IDs on this page, e.g. "what does h12 do?" or "explain step 3".</div>
+     <div class="keys"><kbd>j</kbd>/<kbd>k</kbd> next/prev step · <kbd>x</kbd> mark step reviewed · <kbd>a</kbd> step/all view</div>`;
+  document.querySelectorAll(".step").forEach(el => {
+    el.onclick = () => go(+el.dataset.i);
+    el.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(+el.dataset.i); } };
+  });
+}
+
+const LIMIT = 150, HEAD = 60;
+function hunkCard(id){
+  const h = H[id], f = F[h.file_id];
+  const tags = [];
+  const STATUS_TIP = {added: "New file in this PR", deleted: "File deleted by this PR", renamed: "File renamed by this PR", copied: "File copied by this PR"};
+  if (f.status !== "modified") tags.push(`<span class="tag ${f.status}"${tip(STATUS_TIP[f.status] || f.status)}>${esc(f.status)}</span>`);
+  if (f.generated) tags.push(`<span class="tag"${tip("Generated file (lockfile, existing build output, or marked linguist-generated on the base branch). Collapsed and not highlighted.")}>generated</span>`);
+  if (h.hidden_chars) tags.push(`<span class="tag deleted"${tip("Contains hidden Unicode characters, shown as red U+XXXX markers below")}>hidden chars</span>`);
+  const range = h.placeholder ? "" : `<span class="ctx"${tip(`Old lines ${h.old_start}–${h.old_start + Math.max(0, h.old_count - 1)} → new lines ${h.new_start}–${h.new_start + Math.max(0, h.new_count - 1)}${h.context ? ", inside the enclosing code shown" : ""}`)}>@@ −${h.old_start},${h.old_count} +${h.new_start},${h.new_count}${h.context ? " " + esc(h.context) : ""}</span>`;
+  const ann = flags[id] ? `<div class="ann flag"${tip("Flag: worth a closer look. Ask Claude about it, or comment on GitHub.")}>⚠ ${esc(flags[id])}</div>` : (notes[id] ? `<div class="ann note"${tip("Note: context to help read this hunk")}>↳ ${esc(notes[id])}</div>` : "");
+  const others = [...new Set(f.hunk_ids.map(x => stepOf[x]).filter(i => i !== undefined && i !== stepOf[id]))].sort((a,b)=>a-b);
+  const also = others.length ? `<div class="also">This file also appears in ${others.map(i => `<a data-go="${i}"${tip("Jump to step " + (i+1) + ": " + steps[i].title)}>step ${i+1}</a>`).join(", ")}</div>` : "";
+  let body;
+  if (h.placeholder) {
+    body = `<div class="ph">${esc(h.placeholder)}</div>`;
+  } else {
+    const collapsed = (f.generated || h.lines.length > LIMIT) && !expanded.has(id);
+    const shown = collapsed ? (f.generated ? 12 : HEAD) : h.lines.length;
+    const wr = wordRanges[id];
+    let rows = "";
+    for (let i = 0; i < shown && i < h.lines.length; i++) {
+      const l = h.lines[i];
+      if (l.t === "\\") { rows += `<tr class="m"><td class="ln"></td><td class="ln"></td><td class="sg"></td><td>${esc(l.s)}</td></tr>`; continue; }
+      const cls = l.t === "+" ? "a" : l.t === "-" ? "r" : "";
+      rows += `<tr class="${cls}"><td class="ln">${l.o == null ? "" : l.o}</td><td class="ln">${l.n == null ? "" : l.n}</td><td class="sg">${l.t === " " ? "" : esc(l.t)}</td><td class="cx" data-i="${i}">${lineHTML(plain(l.s), wr[i])}</td></tr>`;
+    }
+    const more = collapsed ? `<button class="more" data-expand="${id}"${tip("Collapsed because it's long or generated. Every line is still part of the review.")}>Show all ${h.lines.length} lines${f.generated ? " (generated file)" : ""}</button>` : "";
+    body = `<div class="code"><table class="d">${rows}</table></div>${more}`;
+  }
+  return `<div class="hunk ${reviewed.has(id) ? "reviewed" : ""}" id="hunk-${id}" data-id="${id}">
+    <div class="hh"><span class="hid"${tip(`Hunk ID. Ask Claude about it, e.g. "what does ${id} do?"`)}>${id}</span><span class="path">${esc(f.path)}</span>${f.old_path ? `<span class="ctx"${tip("Previous path")}>← ${esc(f.old_path)}</span>` : ""}${tags.join("")}${range}
+      <span class="sp"></span>
+      <a href="${esc(ghLink(h))}" target="_blank" rel="noopener"${tip("Open GitHub at this hunk's first changed line, then click + to leave a review comment")}>Comment on GitHub ↗</a>
+      <label${tip("Mark this hunk reviewed. Saved in this browser for this commit.")}><input type="checkbox" data-rev="${id}" ${reviewed.has(id) ? "checked" : ""}> reviewed</label></div>
+    ${ann}${also}${body}</div>`;
+}
+
+function stepSection(i){
+  const s = steps[i];
+  const real = steps.filter(x => !x.unassigned).length;
+  return `<div class="section" id="step-${i}"><h2 class="stephead">${s.unassigned ? "⚠ " : "Step " + (i+1) + ": "}${esc(s.title)}<span class="of">${s.unassigned ? "" : "of " + real}</span></h2>
+    <div class="why">${esc(s.why)}</div>${s.hunks.map(hunkCard).join("")}</div>`;
+}
+
+function mainView(){
+  const m = document.getElementById("main");
+  if (mode === "all") {
+    m.innerHTML = steps.map((_, i) => stepSection(i)).join("");
+  } else {
+    m.innerHTML = stepSection(cur) +
+      `<div class="foot"><button class="btn" id="prev" ${cur===0?"disabled":""}${tip("Previous step [k]")}>← Prev</button>
+       <button class="btn primary" id="markNext"${tip("Mark every hunk in this step reviewed" + (cur < steps.length-1 ? " and go to the next step" : "") + " [x]")}>${cur < steps.length-1 ? "Mark reviewed & next →" : "Mark reviewed ✓"}</button></div>`;
+    document.getElementById("prev").onclick = () => go(cur-1);
+    document.getElementById("markNext").onclick = markStep;
+  }
+  m.querySelectorAll("[data-rev]").forEach(cb => cb.onchange = () => {
+    cb.checked ? reviewed.add(cb.dataset.rev) : reviewed.delete(cb.dataset.rev);
+    saveReviewed(); cb.closest(".hunk").classList.toggle("reviewed", cb.checked); nav();
+  });
+  m.querySelectorAll("[data-expand]").forEach(b => b.onclick = () => { expanded.add(b.dataset.expand); render(); });
+  m.querySelectorAll("[data-go]").forEach(a => a.onclick = () => go(+a.dataset.go));
+  highlightVisible();
+}
+
+function render(){ header(); nav(); mainView(); }
+function go(i){
+  if (i < 0 || i >= steps.length) return;
+  cur = i;
+  try { history.replaceState(null, "", "#step-" + (i+1)); } catch (e) {}
+  if (mode === "all") { nav(); const el = document.getElementById("step-" + i); if (el) el.scrollIntoView({block: "start"}); return; }
+  nav(); mainView(); window.scrollTo(0, 0);
+}
+function markStep(){
+  steps[cur].hunks.forEach(id => reviewed.add(id)); saveReviewed();
+  if (cur < steps.length - 1) go(cur + 1); else { nav(); mainView(); }
+}
+function setMode(m){ mode = m; store.set("prw:mode", m); render(); }
+
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+  if (e.key === "j" || e.key === "ArrowRight") go(Math.min(steps.length-1, cur+1));
+  else if (e.key === "k" || e.key === "ArrowLeft") go(Math.max(0, cur-1));
+  else if (e.key === "x") markStep();
+  else if (e.key === "a") setMode(mode === "all" ? "step" : "all");
+});
+
+const hm = /^#step-(\d+)$/.exec(location.hash);
+if (hm) cur = Math.min(steps.length-1, Math.max(0, +hm[1]-1));
+document.title = "#" + pr.number + " " + pr.title;
+applyEmbeddedChrome();
+render();
+initShiki();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "skill_name": "pr-walkthrough",
+  "evals": [
+    {"id": 1, "name": "normal-open-pr", "prompt": "walk me through PR 15052", "cwd": "clone of cli/cli",
+     "expected_output": "Dependency-ordered plan covering all 19 hunks, short notes, a few meaningful flags, rendered viewer, brief terminal overview.", "files": []},
+    {"id": 2, "name": "large-pr", "prompt": "help me review #14955", "cwd": "clone of cli/cli",
+     "expected_output": "All 124 hunks covered in <=10 coarse, concept-based steps; generated/mechanical last; viewer rendered.", "files": []},
+    {"id": 3, "name": "tiny-dependency-bump", "prompt": "what does 15049 do?", "cwd": "clone of cli/cli",
+     "expected_output": "Minimal plan (1-2 steps) for a go.mod/go.sum bump, no invented flags, very short answer.", "files": []},
+    {"id": 4, "name": "no-clone-fallback", "prompt": "can you help me understand https://github.com/cli/cli/pull/15001", "cwd": "empty directory (not a git repo)",
+     "expected_output": "Uses gh fallback, tells the user it only has hunks (not full files), still covers all 38 hunks and renders the viewer.", "files": []}
+  ]
+}
